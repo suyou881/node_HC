@@ -1,3 +1,5 @@
+let postgresDB = require("./js/services/postgre")
+
 var express = require("express");
 var multer = require("multer");
 var fs = require("fs");
@@ -31,7 +33,7 @@ let controller_main = require("./js/controllers/lgin_controller")
 //get db Connection
 let data = require("./js/services/data-service");
 
-var HTTP_PORT = process.env.PORT || 8080;
+var HTTP_PORT = process.env.PORT || 8000;
 
 var app = express();
 app.use(function (req, res, next) {
@@ -152,14 +154,30 @@ app.use((req, res, next) => {
 // data.connectDB
 // .then(() => app.listen(HTTP_PORT, onHttpStart));
 
-async function listen(){
-    try{
-        let database = await data.con();
-        if(database){
+
+/////////////////////////////////////////////////////// mongo DB
+// async function listen(){
+//     try{
+//         let database = await data.con();
+//         if(database){
+//             app.listen(HTTP_PORT, onHttpStart);
+//         }
+//     }catch(error){
+//         console.log(error);
+//     }
+// }
+
+////////////////////////// postgre DB
+async function listen() {
+    try {
+        let db = await postgresDB.initialize();
+        console.log(db);
+        if (db) {
             app.listen(HTTP_PORT, onHttpStart);
         }
-    }catch(error){
+    } catch (error) {
         console.log(error);
     }
 }
+
 listen();
