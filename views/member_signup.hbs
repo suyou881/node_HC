@@ -226,6 +226,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 	<script src="//d1p7wdleee1q2z.cloudfront.net/post/search.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.js"></script>
 	<script type="text/javascript">
 		$(function () {
 			checkVali();
@@ -236,66 +237,71 @@
 			$("#showPostCode").postcodifyPopUp();
 		}
 
-		//아이디 중복되면 true로 바꿀 변수
-		var flag = true;
-		function checkVali() {
-			$("#bt_regist").click(function () {
-				var email = $("#email").val();
-				var pass = $("#password").val();
-				var rePass = $("#rePassword").val();
-				var addr1 = $("#addr1").val();
-				var addr2 = $("#addr2").val();
-
-				$("#addr").val(addr1 + addr2);
 
 
-				/* var emailVal = frm.Email.value; */
-				check_email = email
-					.search(/^\s*[\w\~\-\.]+\@[\w\~\-]+(\.[\w\~\-]+)+\s*$/g);
-				var checkEmailVal = $("#email").val();
-				if (check_email != 0) {
-					alert('이메일 형식이 일치하지 않습니다.');
-					$("#email").focus();
-					return;
-				} else {
-					$.ajax({
-						url: "/member/member/loginCheck",
-						type: "POST",
-						data: {
-							"checkEmailVal": checkEmailVal
-						},
-						success: function (result) {
-							if (result == "1") {
-								alert("중복되는 이메일입니다");
-								flag = true;
-								return;
-							} else {
-								flag = false;
-							}
-						}
-					});
 
-				}
+function checkVali() {
+	//아이디 중복되면 false로 바꿀 변수
+	let flag = true;
 
-				if (flag == false) {
-					if (pass == "") {
+	let bt_re = document.getElementById("bt_regist");
+	bt_re.addEventListener('click', () => {
+		let email = document.getElementById("email").value
+		let password = document.getElementById("password").value
+		let repass = document.getElementById("rePassword").value
+		let phone = document.getElementById("phone").value
+
+		check_email = email
+			.search(/^\s*[\w\~\-\.]+\@[\w\~\-]+(\.[\w\~\-]+)+\s*$/g);
+		if (check_email != 0) {
+			alert('The email format does not match.');
+			document.getElementById("email").focus();
+			return;
+		}
+		axios({
+			method: "POST",
+			url: "/member/checkMemberExist",
+			data: {
+				"email": email
+			}
+		})
+		.then((exist) => {
+			//alert(exist.data);
+			let result = exist.data;
+			console.log("/member/checkMemberExist  ajax:    " + result);
+			if (result == true) {
+				flag = false;
+				alert('The email is already in use.');
+				document.getElementById("email").focus();
+			} else {
+				flag=true;
+				if (flag == true) {
+					if (password == "") {
 						alert("비밀번호를 입력해주세요.");
-						$("#password").focus();
+						document.getElementById("password").focus();
 						return;
-					} else if (pass != rePass) {
+					} else if (password != repass) {
 						alert("비밀번호가 일치하지 않습니다.");
-						$("#password").focus();
+						document.getElementById("password").focus();
 						return;
 					} else {
-						$("form").attr({
-							"action": "/member/regist",
-							"method": "POST"
-						});
-						$("form").submit();
+						let form = document.querySelector("form");
+						form.action = "/member/regist";
+						form.method = "POST";
+						form.submit();
 					}
+				} else {
+					document.getElementById("email").focus();
 				}
-			})
-		}
+			}
+		})
+		.catch(err => {
+			console.log(err);
+			res.status(500).send("Unable to Add the Employee");
+			return;
+		})
+	})
+}
 	</script>
 </body>
 

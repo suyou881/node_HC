@@ -1,4 +1,5 @@
 let postgresDB = require("./js/services/postgre")
+let member_func = require("./js/services/member")
 
 var express = require("express");
 var multer = require("multer");
@@ -6,6 +7,7 @@ var fs = require("fs");
 var bodyParser = require("body-parser");
 var querystring = require("querystring");
 var path = require("path");
+const axios = require('axios').default;
 
 var exphbs = require("express-handlebars");
 const formidable = require('formidable');
@@ -32,6 +34,7 @@ let controller_main = require("./js/controllers/lgin_controller")
 
 //get db Connection
 let data = require("./js/services/data-service");
+//const { Error } = require("sequelize/types");
 
 var HTTP_PORT = process.env.PORT || 8000;
 
@@ -144,8 +147,29 @@ app.post("/member_login", async (req, res) => {
         })
     }
 })
+app.post("/member/regist", async (req, res)=>{
+    try{
+        let result = await member_func.addMember(req.body);
+        console.log(result);
+        res.redirect("/");
+    }catch(err){
+        console.log(err);
+        res.status(500).send("Unable to Add the Member");
+    }
+});
 
-
+app.post("/member/checkMemberExist", async (req,res)=>{
+    console.log(req.body);
+    try{
+        let exist = await member_func.checkMemberExist(req.body.email);
+        console.log("server  /member/checkMemberExist  :" + exist);
+        res.send(exist);
+    }catch(err){
+        //console.log("/member/checkMemberExist ==> error");
+        console.log(err);
+        res.status(500).send("Unable to Add the Member");
+    }
+})
 
 app.use((req, res, next) => {
     res.status(404).send('Page Not Found');

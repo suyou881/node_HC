@@ -264,5 +264,6 @@ function initialize() {
 }
 
 module.exports={
-    initialize
+    initialize, Season, Category, Product, Img, Warehousing, Member, 
+    OrderSummary, OrderDetail, Cart, Board, BoardImg, Admin
 };
