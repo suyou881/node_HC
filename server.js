@@ -36,7 +36,7 @@ let controller_main = require("./js/controllers/lgin_controller")
 let data = require("./js/services/data-service");
 //const { Error } = require("sequelize/types");
 
-var HTTP_PORT = process.env.PORT || 8000;
+var HTTP_PORT = process.env.PORT || 8080;
 
 var app = express();
 app.use(function (req, res, next) {
