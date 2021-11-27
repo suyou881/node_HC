@@ -1,7 +1,4 @@
 const mongoose = require('mongoose');
-const {
-    resolve
-} = require('path/posix');
 
 let database;
 
