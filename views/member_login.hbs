@@ -94,34 +94,35 @@
                     </div>
                 </div>
                 <div class="login_append">
-            <!-- <div id="login">LOG IN</div>
+                    <!-- <div id="login">LOG IN</div>
 					<div id="join">JOIN US</div> -->
-            <button type="button" id="login">LOG IN</button>
-            <button type="button" id="join">JOIN US</button>
+                    <button type="button" id="login">LOG IN</button>
+                    <button type="button" id="join">JOIN US</button>
 
 
-            <span class="txt_find">
-                <a href="/member/member/findMember" class="link_find"
-                    style="right: 45px; display: inline-block; position: relative;">아이디 / 비밀번호 찾기 </a>
-                <span style="width: 20px"></span>
-                <a href="#" class="link_find" style="right: 15px; display: inline-block; position: relative;">비회원
-                    주문조회</a>
-            </span>
-        </div>
+                    <span class="txt_find">
+                        <a href="/member/member/findMember" class="link_find"
+                            style="right: 45px; display: inline-block; position: relative;">아이디 / 비밀번호 찾기 </a>
+                        <span style="width: 20px"></span>
+                        <a href="#" class="link_find"
+                            style="right: 15px; display: inline-block; position: relative;">비회원
+                            주문조회</a>
+                    </span>
+                </div>
             </div>
         </form>
-        
+
     </div>
     {{#if msg}}
-        <sapn id="msg" style="display:none">{{msg}}</sapn>
+    <sapn id="msg" style="display:none">{{msg}}</sapn>
     {{/if}}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
 
         //failed to login and display err
-        window.addEventListener('load', ()=>{
+        window.addEventListener('load', () => {
             let err = document.getElementById("msg").innerHTML;
-            if(err !=undefined){
+            if (err != undefined) {
                 alert(err);
             }
         });
@@ -156,7 +157,7 @@
                 document.getElementById("password").focus();
                 return;
             }
-             form.submit();
+            form.submit();
         });
 
         // click join bt

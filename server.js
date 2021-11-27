@@ -1,5 +1,4 @@
-let postgresDB = require("./js/services/postgre")
-let member_func = require("./js/services/member")
+
 
 var express = require("express");
 var multer = require("multer");
@@ -29,11 +28,14 @@ const cloudinaryConfig = (req, res, next) => {
 }
 
 
+let service_member = require("./services/service_member")
+
 //get controller
-let controller_main = require("./js/controllers/lgin_controller")
+let controller_member = require("./controllers/controller_member");
 
 //get db Connection
-let data = require("./js/services/data-service");
+let mongo = require("./models/mongo");
+let postgresDB = require("./models/postgre");
 //const { Error } = require("sequelize/types");
 
 var HTTP_PORT = process.env.PORT || 8080;
@@ -137,7 +139,7 @@ app.get("/member_login", (req, res) => {
 app.post("/member_login", async (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
-    let result = await controller_main.login(req, res);
+    let result = await controller_member.login(req, res);
     if (result.code == 0) {
         res.redirect("/");
     } else {
@@ -149,7 +151,7 @@ app.post("/member_login", async (req, res) => {
 })
 app.post("/member/regist", async (req, res)=>{
     try{
-        let result = await member_func.addMember(req.body);
+        let result = await controller_member.addMember(req.body);
         console.log(result);
         res.redirect("/");
     }catch(err){
@@ -159,9 +161,11 @@ app.post("/member/regist", async (req, res)=>{
 });
 
 app.post("/member/checkMemberExist", async (req,res)=>{
+
+    console.log(req);
     console.log(req.body);
     try{
-        let exist = await member_func.checkMemberExist(req.body.email);
+        let exist = await service_member.checkMemberExist(req.body.email);
         console.log("server  /member/checkMemberExist  :" + exist);
         res.send(exist);
     }catch(err){
